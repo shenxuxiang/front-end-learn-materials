@@ -153,9 +153,7 @@
 
 #### 区分 merge 和 rebase
 > `git merge` 在合并分支时，会产生一条新的合并记录，类似 `Merge branch branchA into branchB` 的一条提交信息。如下图:
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/3.jpg?raw=true)
->
-> rebase 翻译为变基，他的作用和 merge 很相似，用于把一个分支的修改合并到当前分支上。并且不会产生新的合并记录。
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/3.png?raw=true)
 >
 > 假设我们现在有2条分支，一个为 `master`，一个为 `dev`，都基于初始的提交 `feat: 添加了materials 文件` 进行检出分支。
 >
@@ -168,6 +166,26 @@
 > 
 ![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/12.png?raw=true)
 >
+> rebase 翻译为变基，他的作用和 merge 很相似，用于把一个分支的修改合并到当前分支上。并且不会产生新的合并记录。如下图
+>
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/2.jpg?raw=true)
 
 
+## 代码提交
+
+#### 将代码提交到暂存区
+> git add [filename] 将指定文件提交到暂存区
+>
+> git add . 表示将所有的文件都添加到暂存区
+>
+
+#### 撤销暂存区中的文件
+> git reset [filename] 将指定文件从暂存区中撤销
+>
+> git reset . 将所有文件从暂存区中撤销
+
+#### 将暂存区中的文件提交到本地仓库
+> git commit -m [message]
+>
+> 如果我们希望修改 commit-message 中的消息，那么你可以使用 `git commit --amend`
 
