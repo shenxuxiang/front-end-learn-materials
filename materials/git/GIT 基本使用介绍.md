@@ -131,31 +131,43 @@
 > 
 > `git fetch` 取回的代码保存在 `origin/<branch-name>` 中，如果要读取取回的内容需要通过 `origin/<branch-name>`:。
 
-
 #### 代码合并（merge）
-> 执行 `git fetch origin master` 取回代码
+> git fetch origin master
 >
-> 合并代码 `git fetch origin/master`
+> git merge origin/master
+>
+> 还可以使用更简单的方式: `git pull origin master`
+>
+> 如果我们想合并本地的两个分支，则可以这样使用 merge: `git merge [local-branch-name]`
+
+#### 代码合并（rebase）
+> git fetch origin master
+>
+> git rebase origin/master
+>
+> 还可以使用更简单的方式: `git pull origin master --rebase`
+>
+> 代码在合并的过程如果有冲突，需要先解决冲突，然后再执行: `git add .; git rebase --comtinue`
+>
+> 如果不想继续合并，可以执行 `git rebase --abort` 取消合并
+
+#### 区分 merge 和 rebase
+> `git merge` 在合并分支时，会产生一条新的合并记录，类似 `Merge branch branchA into branchB` 的一条提交信息。如下图:
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/3.jpg?raw=true)
+>
+> rebase 翻译为变基，他的作用和 merge 很相似，用于把一个分支的修改合并到当前分支上。并且不会产生新的合并记录。
+>
+> 假设我们现在有2条分支，一个为 `master`，一个为 `dev`，都基于初始的提交 `feat: 添加了materials 文件` 进行检出分支。
+>
+> 之后，`master` 分支增加了 `1.js`，并提交，`dev` 也增加 `2.js`，并提交。
+>
+> 此时，我们执行 `git pull origin master` 合并代码，执行 `git log --graph` 查看提交记录。如下图
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/11.png?raw=true)
+>
+> 现在我们看看 rebase 的合并记录，如下图
+> 
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/12.png?raw=true)
+>
 
 
 
-> 一、现在我们要拉取远程 master 最新的代码：
-    
-    git fetch origin master;
-    
-    // 也可以是 git merge origin/master
-    git rebase origin/master; 
-
-    针对上面的方法，还有更简单的： git pull origin master --rebase
-    
-    如果你使用的不是 rebase，可以使用 git pull origin master;
-        
-
-二、基于远程分支创建一个新的分支
-    
-    git fetch origin master;
-    
-    git checkout -b newBranch origin/master
-
-    先同步到远程仓库最新的代码，然后通过 origin/master 就可以拿到最新代码，并创建新分支。
-  
