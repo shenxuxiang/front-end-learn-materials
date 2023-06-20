@@ -117,6 +117,7 @@
 ## 三、拉取远程仓库代码、合并代码
 
 #### 拉取远程仓库代码
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/7.png?raw=true)
 > git fetch <remote-name>
 >
 > 也可以取回特定的分支 `git fetch <remote-name> <remote-branch-name>`
@@ -129,16 +130,16 @@
 > 
 > 同 `git checout -b dev  [<remote-name>/<remote-branch-name>]` 是一样的效果
 > 
-> `git fetch` 取回的代码保存在 `origin/<branch-name>` 中，如果要读取取回的内容需要通过 `origin/<branch-name>`:。
+> `git fetch` 取回的代码保存在 `origin/<branch-name>` 中，如果要读取取回的内容需要通过 `origin/<branch-name>`。
 
 #### 代码合并（merge）
 > git fetch origin master
 >
 > git merge origin/master
 >
-> 还可以使用更简单的方式: `git pull origin master`
+> 还可以使用更简单的方式: `git pull origin master` 可以理解为是上面两行命令的合并；
 >
-> 如果我们想合并本地的两个分支，则可以这样使用 merge: `git merge [local-branch-name]`
+> 如果你想合并本地的两个分支，则可以这样使用: `git merge dev` 表示将合并本地的 dev 分支。
 
 #### 代码合并（rebase）
 > git fetch origin master
@@ -171,13 +172,17 @@
 ![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/2.jpg?raw=true)
 
 
-## 代码提交
+## 四、代码提交
 
 #### 将代码提交到暂存区
 > git add [filename] 将指定文件提交到暂存区
 >
 > git add . 表示将所有的文件都添加到暂存区
 >
+> 如果你不修改某个文件，则可以执行 `git checkout [filename]` 则可以撤销文件的修改。
+>
+> 当让，你也可以撤销所有的文件 `git checkout .`
+
 
 #### 撤销暂存区中的文件
 > git reset [filename] 将指定文件从暂存区中撤销
@@ -188,4 +193,103 @@
 > git commit -m [message]
 >
 > 如果我们希望修改 commit-message 中的消息，那么你可以使用 `git commit --amend`
+>
+> 此时界面会切换到 vim 界面，然后你就可以对commit message 进行修改。修改完成后保存并退出。就可以了。
+
+#### 撤销本地仓库中的提交
+> git reset --soft HEAD^ 表示撤销最近一次的 `commit` 操作
+>
+> 当让，我么还可以撤销指定 `commit` 的操作记录，执行 `git reset --soft [commit-id]`
+>
+> 使用 `git reset --soft` 软回退，只是将提交从本地仓库撤回到本地的暂存区中。
+> 
+> 在这之后的修改都可以使用 `git add` 添加到暂存区。
+
+#### 提交到远程仓库
+> 如果本地分支与远程分支已经关联了，则可以直接使用 `git push` 提交代码，
+>
+> 如果没有关联，我们可以执行 `git push -u origin [local-branch]:[remove-branch]`
+>
+> 如果远程分支名与本地分支名同名，执行 `git push -u origin [local-branch]` 此时的远程分支名可以省略。
+>
+> 如果不相关联，则可以将 [-u] 去掉就可以了。
+
+#### 如何删除远程分支
+> git push origin [blank]:<remote-branch>
+>
+> git push origin -d [remote-branch]
+>
+> 以上两种方法都可以将远程的分支进行删除。
+
+
+## 五、GIT场景回顾
+
+#### stash
+> 当你正在开发项目时，这时有一个 `hot-fix` 需要及时修复，这时候你需要怎么做？？？
+>
+> 此时有人可能会想先 commit，然后切换分支去修改，这是一种方法，但不是最好的。
+>
+> 最好的方法是使用 `git stash`，然后切换分支去修线上bug，处理完成后再切换回原来分支；
+>
+> 此时，你再通过 `git statsh pop` 将代码取回到最新的状态，并清楚 stash 列表
+>
+> `git stash list` 命令可以将当前的 stash 栈信息打印出来，你只需要将找到对应的版本号，
+>
+> 使用 `git stash apply stash@{1}` 就可以将你指定版本号为 stash@{1} 的工作取出来，
+>
+> 当你将所有的栈都应用回来的时候执行 `git stash clear` 来将栈清空。
+
+
+#### blame
+> 如果你想知道文件的某个位置是谁修改的，什么时候修改的，那么这个命令可以帮助你；
+>
+> 比如说，我想知道 index.js 文件的第160-170 行是谁什么时候修改的，可以执行 `git blame -L 160,+10 .index.js`
+
+#### clean
+> git clean -df 可以帮助你清除 untracked 文件
+
+#### prune
+> 与远程仓库代码进行一次同步，如果本地仓库很久没有与远程仓库同步了。可以执行 `git remote prune origin`
+>
+> 该命令执行后，如果远程的某些分支已经被删除，那么此时本地与之对应的分支也将会被删除，
+>
+> 但是，当前正激活的分支不会被删除。
+
+
+## 六、代码会滚
+
+#### 代码硬回退
+> git reset --hard HEAD^
+>
+> git reset --hard [commit-id]
+>
+> 上面两种方法，都能使代码回退到之前的版本。前者是回退到最近的一次 commit 位置，后者回退到指定的 commit 位置
+>
+> 代码硬回退之后，本地代码在这之后提交都将被核销，并且我们在 log 中也无法查看到在这之后提交的 commit-log
+>
+> 但是，我想说的是 `git reflog` 命令，却能帮我们查看到所有的操作：
+>
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/8.png?raw=true)
+>
+> 上图是我的提交记录，然后执行 `git reset --hard e5e60adb532774021983dc51eff0651496fdf99a`
+> 此时，我们的代码就会滚到了【删除了 setupproxy js文件】这个位置。
+> 执行 `git log` 然后你会发现，日志中已经没有了关于 hello 的日志。但是你可以通过 `git reflog` 可以找到
+
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/9.png?raw=true)
+>
+> 通过上面的案例我们可以联想到，在团队协作中，如果都是基于同一个分支进行打包和发布，
+>
+> 在线上出现问题时，需要将代码即是会滚。如果使用 git reset --hard 来解决问题，很显然不是很切合实际，
+>
+> 因为，一旦你使用硬回退来会滚代码时，所有在你之后的 commit 都将会撤销。
+
+
+#### revert
+> git revert [commit-id]
+>
+> `git revert` 与 `git reset --hard` 有什么区别？？？
+>
+> `git revert` 是用一次新的 commit 来回滚之前指定的 commit，此次提交之前的 commit 都会被保留；
+>
+> `git reset` 是回到某次提交，在此 `commit-id` 之前的提交都将保留，但是此 `commit-id` 之后的修改都会被删除。
 
