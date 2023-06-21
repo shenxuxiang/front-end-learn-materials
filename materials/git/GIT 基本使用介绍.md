@@ -1,6 +1,6 @@
 ## GIT 基本使用技能介绍
 在对 git 进行基本介绍之前，我们先看一张图：
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/1.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/1.png?raw=true)
 
 关于图中的 `Workspace`，`Index`，`Repository`，`Remote` 分别代表的是：我们的工作区、本地暂存区、本地仓库、以及远程仓库
 
@@ -15,10 +15,6 @@
 
 #### 远程仓库（Remote）
 > 举个例子，当我们使用 GitHub 托管我们项目时，它就是一个远程仓库。通常我们使用 `git clone` 命令将远程仓库代码拷贝下来，本地代码更新后，通过 `git push` 托送给远程仓库。
->
->
->
->
 
 
 ## 一、项目初始化
@@ -98,10 +94,10 @@
 >
 > 或者可以直接拉取所有分支 `git fetch`
 
-#### 表示依据当前的远程分支新建
+#### 表示依据当前的分支新建
 > git checkout -b newBranch 
 
-#### 查看本地分支 并显示当前所处的分支
+#### 查看本地分支，并显示当前所处的分支
 > git branch
 
 #### 查看远程分支，并显示当前本地分支和远程那个分支是映射关系
@@ -120,7 +116,7 @@
 ## 三、拉取远程仓库代码、合并代码
 
 #### 拉取远程仓库代码
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/7.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/7.png?raw=true)
 > git fetch <remote-name>
 >
 > 也可以取回特定的分支 `git fetch <remote-name> <remote-branch-name>`
@@ -157,22 +153,22 @@
 
 #### 区分 merge 和 rebase
 > `git merge` 在合并分支时，会产生一条新的合并记录，类似 `Merge branch branchA into branchB` 的一条提交信息。如下图:
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/3.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/3.png?raw=true)
 >
 > 假设我们现在有2条分支，一个为 `master`，一个为 `dev`，都基于初始的提交 `feat: 添加了materials 文件` 进行检出分支。
 >
-> 之后，`master` 分支增加了 `1.js`，并提交，`dev` 也增加 `2.js`，并提交。
+> 之后，`master` 分支增加了 `a.js`，并提交，`dev` 也增加 `b.js`，并提交。
 >
 > 此时，我们执行 `git pull origin master` 合并代码，执行 `git log --graph` 查看提交记录。如下图
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/11.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/11.png?raw=true)
 >
 > 现在我们看看 rebase 的合并记录，如下图
 > 
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/12.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/12.png?raw=true)
 >
 > rebase 翻译为变基，他的作用和 merge 很相似，用于把一个分支的修改合并到当前分支上。并且不会产生新的合并记录。如下图
 >
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/2.jpg?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/2.jpg?raw=true)
 
 
 ## 四、代码提交
@@ -197,16 +193,24 @@
 >
 > 如果我们希望修改 commit-message 中的消息，那么你可以使用 `git commit --amend`
 >
-> 此时界面会切换到 vim 界面，然后你就可以对commit message 进行修改。修改完成后保存并退出。就可以了。
+> 此时界面会切换到 vim 界面，然后你就可以对 commit message 进行修改。修改完成后保存并退出。就可以了。
+>
+> 其实我们可以将 `--amend` 理解为是将上次的和这次的 commit 进行合并，并修改 commit-message。
 
 #### 撤销本地仓库中的提交
-> git reset --soft HEAD^ 表示撤销最近一次的 `commit` 操作
+> `git reset --soft HEAD^` 表示撤销最近一次的 `commit` 操作，我们一般称之为‘软回退’。
 >
-> 当让，我么还可以撤销指定 `commit` 的操作记录，执行 `git reset --soft [commit-id]`
+> 也可以指定 commit-id: `git reset --soft [commit-id]`，此时 GIT 就会撤销此 commit 之后的所有提交（保留之前的提交）
 >
-> 使用 `git reset --soft` 软回退，只是将提交从本地仓库撤回到本地的暂存区中。
+> 注意，‘软回退’是将已经提交从本地仓库的代码撤回到本地的暂存区，
 > 
-> 在这之后的修改都可以使用 `git add` 添加到暂存区。
+> 也就是说‘软回退’后，你的代码是处于 `git add .` 之后的状态，（软回退命令并不会修改我们的代码，只是修改 GIT 提交状态）
+>
+> 基于 `git reset --soft HEAD^` 来理解，此时代码处于上一次 commit 之后，再执行 `git add .` 命令后的状态。
+>
+> 基于 `git reset --soft [commit-id]` 来理解，此时代码处于此 commit 之后，再执行 `git add .` 命令后的状态。
+
+
 
 #### 提交到远程仓库
 > 如果本地分支与远程分支已经关联了，则可以直接使用 `git push` 提交代码，
@@ -272,13 +276,13 @@
 >
 > 但是，我想说的是 `git reflog` 命令，却能帮我们查看到所有的操作：
 >
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/8.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/8.png?raw=true)
 >
 > 上图是我的提交记录，然后执行 `git reset --hard e5e60adb532774021983dc51eff0651496fdf99a`
 > 此时，我们的代码就会滚到了【删除了 setupproxy js文件】这个位置。
 > 执行 `git log` 然后你会发现，日志中已经没有了关于 hello 的日志。但是你可以通过 `git reflog` 可以找到
 
-![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/images/9.png?raw=true)
+![image](https://github.com/shenxuxiang/front-end-learn-materials/blob/master/materials/git/images/9.png?raw=true)
 >
 > 通过上面的案例我们可以联想到，在团队协作中，如果都是基于同一个分支进行打包和发布，
 >
